@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <div class="container">
+  <div class="container-fluid">
     <div class="header-page">
       <h1>Spoti<span>Fine</span></h1>
     </div>
@@ -8,21 +8,33 @@
     <div class="image-player"></div>
 
 
+
+  <div class="list-container">
+
+
     <div class="list-songs" v-for="(song,i) in songs" :key="i">
-      <i class="fab fa-itunes-note icon" />
-      <div>
-        <a v-on:click="next()">
-          <h3>{{song.title}}</h3>
+      <div class="row">
+
+      <div class="col-sm-6"><span class="icon"><i class="fab fa-itunes-note " /></span>
+      <div class="content">
+        <a>
+          <p class="list-song-title" @click="selectSong(song)">{{song.title}}</p>
         </a>
         <p>{{song.artist}}</p>
       </div>
+      </div>
+      <div class="col-sm-6">
+        <p style="text-align:center;">{{song.album}}</p>
+      </div>
+      </div>
     </div>
+  </div>
 
     <div class="buttons">
       <button>prev</button>
       <button class="far fa-pause-circle" v-if="isPlaying" @click="pauseSong"></button>
       <button class="far fa-play-circle" v-else @click="playSong"></button>
-      <button>Next</button>
+      <button @click="next">Next</button>
     </div>
 
 
@@ -43,58 +55,97 @@ export default {
       songs: [{
           artist: "Metallica",
           title: "For whom the bell tolls",
-          src: "./assets/bonita.mp3"
+          album:" to be research",
+          src: require("./assets/forwhom.mp3")
         },
         {
           artist: "Metallica",
           title: "Creeping Death",
-          src: "./assets/logo.png"
+          album:" to be research",
+          src: require("./assets/creeping-death.mp3")
         },
         {
           artist: "Megadeath",
           title: "A tout le mond",
-          src: "./assets/logo.png"
+          album:" to be research",
+          src: require("./assets/a-toute-le-monde.mp3")
+        },
+        {
+          artist: "Scorpions",
+          title: "Still Loving You",
+          album:" to be research",
+          src: require("./assets/still-loving-you.mp3")
+        },
+        {
+          artist: "The Eagles",
+          title: "Hotel California Solo",
+          album:" to be research",
+          src: require("./assets/hotel-california-solo.mp3")
         }
       ],
       isPlaying: false,
+      player:new Audio(),
+      index:0
 
 
 
     }
   },
-  created() {
-    this.current = this.songs[0];
-  },
+
+
   methods: {
 
 
     playSong() {
-      var audio = new Audio(this.current.src);
-      audio.play();
-
-      this.isPlaying = !this.isPlaying;
-
+    /*  if (typeof song.src !="undefined"){
+        this.current=song;
+      }
+      this.player.src=this.current.src;
+      this.player.play();
+      this.isPlaying=true;
+!
+*/    if (Object.keys(this.current).length === 0){
+      this.current=this.songs[1];
+      console.log(this.current);
+      this.player.src=this.current.src;
+      this.player.play();
+      this.isPlaying=true;
+    }else{
+    this.player.play();
+      this.isPlaying=true;
+}
 
     },
     pauseSong() {
-      //player.pause();
-      this.isPlaying = !this.isPlaying;
+      this.player.pause();
+      this.isPlaying=false;
+
     },
     next(){
-        for (var i = 0 ; i < this.songs.length; i++){
-
-          if(this.current.src=this.songs[i].src)
-          {
-            if(i<this.songs.lenght){
-              this.current=this.songs[i];
-            }else{
-                this.current=this.songs[0];
-            }
-          }else{
-            console.log("hi");
-          }
-
+  for( let i = this.index; i < this.songs.length; i++ )
+      if( i < this.songs.length){
+        if(this.current.src == this.songs[i]){
+          //player.pause()
+          this.current=this.songs[i+1];
+          this.player.src=this.current.src;
+          this.player.play();
+          console.log("here");
         }
+          console.log("there-hey");
+          this.index=i+1;
+      }
+
+    },
+    selectSong(song){
+      if (typeof song.src !="undefined"){
+        this.current=song;
+      }
+
+      this.player.pause();
+      this.current=song;
+      this.player.src=this.current.src;
+      this.player.play();
+      this.isPlaying=true;
     }
   }
 }
@@ -108,11 +159,14 @@ export default {
 }
 
 body {
+  margin: 0;
+  padding:0;
   background-color: #272727;
 }
 
-.container {
-  width: 80%;
+.container-fluid {
+  padding: 0;
+  width: 100vw;
   justify-content: center;
 }
 
@@ -144,7 +198,7 @@ body {
 .list-songs {
 
 
-  background-color: #101010;
+
   width: 100vw;
   color: #F3F3F3;
 
@@ -157,12 +211,23 @@ body {
 
 
 }
+.list-container{
+    background-image:linear-gradient(#1F1F1F,#131313);
+}
+.list-song-title{
+  font-size: 17px;
+  cursor: pointer;
+}
 
 .list-songs .icon {
   float: left;
   margin-right: 8px;
   position: relative;
-  top: 3px;
+
+}
+.list-songs .content{
+  margin-top: 0px;
+  margin-left: 21px;
 }
 
 .buttons {
@@ -170,11 +235,13 @@ body {
   bottom: 0;
   display: flex;
   height: 80px;
-  width: 100vh;
+  width: 100vw;
 
   justify-content: center;
   align-items: center;
   border: 1px solid white;
+
+  background-color: #282828;
 
 }
 
