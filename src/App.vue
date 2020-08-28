@@ -4,7 +4,9 @@
     <div class="header-page">
       <h1>Spoti<span>Fine</span></h1>
     </div>
-    <div class="title-player">{{current.title}}</div>
+
+    <div class="main">
+    <div class="title-player"></div>
     <div class="image-player"></div>
 
 
@@ -18,7 +20,11 @@
       <div class="col-sm-6"><span class="icon"><i class="fab fa-itunes-note " /></span>
       <div class="content">
         <a>
-          <p class="list-song-title" @click="selectSong(song)">{{song.title}}</p>
+          <p class="list-song-title"
+          @click="selectSong(song,i)"
+          :class="(song.src === current.src) ? 'playing' :''"
+
+          >{{song.title}}</p>
         </a>
         <p>{{song.artist}}</p>
       </div>
@@ -31,14 +37,14 @@
   </div>
 
     <div class="buttons">
-      <button>prev</button>
+      <button @click="prev">prev</button>
       <button class="far fa-pause-circle" v-if="isPlaying" @click="pauseSong"></button>
       <button class="far fa-play-circle" v-else @click="playSong"></button>
       <button @click="next">Next</button>
     </div>
 
 
-
+</div>
   </div>
 </div>
 </template>
@@ -105,7 +111,7 @@ export default {
       this.isPlaying=true;
 !
 */    if (Object.keys(this.current).length === 0){
-      this.current=this.songs[1];
+      this.current=this.songs[0];
       console.log(this.current);
       this.player.src=this.current.src;
       this.player.play();
@@ -121,22 +127,31 @@ export default {
       this.isPlaying=false;
 
     },
-    next(){
-  for( let i = this.index; i < this.songs.length; i++ )
-      if( i < this.songs.length){
-        if(this.current.src == this.songs[i]){
-          //player.pause()
-          this.current=this.songs[i+1];
-          this.player.src=this.current.src;
-          this.player.play();
-          console.log("here");
-        }
-          console.log("there-hey");
-          this.index=i+1;
+    prev(){
+      this.index--;
+      if(this.index<0){
+        this.index=this.songs.length-1;
+        console.log(this.current);
       }
-
+      this.current=this.songs[this.index];
+      this.player.src=this.current.src;
+      this.player.play();
     },
-    selectSong(song){
+    next(){
+
+
+
+      this.index++;
+      if (this.index >this.songs.length-1){
+        //this.index=this.songs.length-1;
+        this.index=0;
+      }
+      this.current=this.songs[this.index];
+      this.player.src=this.current.src;
+      this.player.play();
+      console.log(this.index);
+    },
+    selectSong(song,i){
       if (typeof song.src !="undefined"){
         this.current=song;
       }
@@ -146,6 +161,7 @@ export default {
       this.player.src=this.current.src;
       this.player.play();
       this.isPlaying=true;
+      this.index=i;
     }
   }
 }
@@ -183,6 +199,8 @@ body {
 
   font-size: 18px;
   font-family: 'montserrate', sans-serif;
+
+  position: fixed;
 }
 
 .header-page h1 {
@@ -195,6 +213,11 @@ body {
   font-weight: 600;
 }
 
+.main{
+padding-top: 100px;
+
+height: 1500px;
+}
 .list-songs {
 
 
@@ -213,6 +236,7 @@ body {
 }
 .list-container{
     background-image:linear-gradient(#1F1F1F,#131313);
+    height: 100vh;
 }
 .list-song-title{
   font-size: 17px;
@@ -228,6 +252,11 @@ body {
 .list-songs .content{
   margin-top: 0px;
   margin-left: 21px;
+}
+
+.playing{
+  color: #4ef002;
+
 }
 
 .buttons {
