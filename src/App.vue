@@ -8,11 +8,11 @@
     <div class="main" >
       <section id="front" class="container-fluid">
         <div class="row">
-        <div class="col-sm-4 col-6 col-md-4" style="border:1px solid white;">
+        <div class="col-sm-12 col-md-4  p-0" >
           <img class="image-front" :src="current.image" alt="">
         </div>
 
-        <div class="col-sm-8 col-6 col-md-8" style="border:1px solid white;">
+        <div class="col-sm-12 col-md-8 " >
           <h1>{{current.title}}</h1>  <h3>{{current.artist}}</h3>
           <p>{{current.paragraph}}</p>
 
@@ -30,22 +30,23 @@
 
       <div class="list-container">
 
-        <div class="row list-header">
-          <div class="col-sm-6 col-7" style="border:1px solid white;">title</div>
-          <div class="col-sm-6 col-5" style="border:1px solid white; " >album</div>
+        <div class="row list-header" >
+          <div class="col-sm-6 col-7" >title</div>
+          <div class="col-sm-6 col-5"  >album</div>
         </div>
         <div class="list-songs" v-for="(song,i) in songs" :key="i">
-          <div class="row">
+          <div class="row" style="margin-bottom:5px;">
 
-            <div class="col-sm-6 col-7" style="border:1px solid white;"><span class="icon"><i class="fab fa-itunes-note " /></span>
+            <div class="col-sm-6 col-7" ><span class="icon"><i class="fab fa-itunes-note " /></span>
               <div class="content">
+                <img :src="song.image" alt="" class="song-image">
                 <a>
                   <p class="list-song-title" @click="selectSong(song,i)" :class="(song.src === current.src) ? 'playing' :''">{{song.title}}</p>
                 </a>
                 <p>{{song.artist}}</p>
               </div>
             </div>
-            <div class="col-sm-6 col-5" style="border:1px solid white;" >
+            <div class="col-sm-6 col-5 song-album"  >
               <p :class="(current.src == song.src) ? 'playing' : ''">{{song.album}}</p>
             </div>
           </div>
@@ -53,7 +54,8 @@
       </div>
 
       <div class="buttons">
-        <button >Random</button>
+        <button v-on:click="randomactive=!randomactive"
+        :class="(randomactive === true) ? 'playing' :''">Random</button>
         <button @click="prev">prev</button>
         <button class="far fa-pause-circle" v-if="isPlaying" @click="pauseSong"></button>
         <button class="far fa-play-circle" v-else @click="playSong"></button>
@@ -80,15 +82,15 @@ export default {
       songs: [{
           artist: "Metallica",
           title: "For whom the bell tolls",
-          album: " to be research",
+          album: "Right the lightning",
           src: require("./assets/songs/metallica/forwhom.mp3"),
-          image: require("./assets/songs/metallica/ride-the-lightning.jpg"),
-          paragraph:"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          image: require("./assets/songs/metallica/ride-the-lightning2.jpeg"),
+          paragraph:"is a song by American heavy metal band Metallica. It was first released on the group's second album, Ride the Lightning (1984). Elektra Records also released it as a promotional single, with both edited and full-length versions. The song is generally regarded as one of Metallica's most popular; by March 2018, it ranked number five on the band's live performance count.[2] Several live albums and video albums include the song."
         },
         {
           artist: "Metallica",
           title: "Creeping Death",
-          album: " to be research",
+          album: "Ride the lightning",
           src: require("./assets/songs/metallica/creeping-death.mp3"),
           image: require("./assets/songs/metallica/ride-the-lightning2.jpeg"),
           paragraph:"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -96,7 +98,7 @@ export default {
         {
           artist: "Megadeath",
           title: "A tout le monde",
-          album: " to be research",
+          album: " to be researched ",
           src: require("./assets/songs/megadeath/a-toute-le-monde.mp3"),
           image: require("./assets/songs/megadeath/Megadeth-Youthanasia.jpg"),
           paragraph:"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -106,7 +108,7 @@ export default {
           title: "Still Loving You",
           album: " to be research",
           src: require("./assets/songs/scorpions/still-loving-you.mp3"),
-          image: require("./assets/logo.png"),
+          image: require("./assets/songs/scorpions/scorpions-logo.jpeg"),
           paragraph:"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         },
         {
@@ -115,18 +117,26 @@ export default {
           album: " to be research",
           src: require("./assets/songs/hotel-california-solo.mp3"),
           image: require("./assets/logo.png"),
-          paragraph:"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          paragraph:""
+        },
+         {
+          artist: "Korn",
+          title: "Blind",
+          album: "Korn reharsal",
+          src: require("./assets/songs/blind-korn.mp3"),
+          image: require("./assets/korn-logo.jpeg"),
+          paragraph:"is an American nu metal band from Bakersfield, California, formed in 1993. The band is notable for pioneering the nu metal genre and bringing it into the mainstream."
         }
       ],
       isPlaying: false,
       player: new Audio(),
-      index: 0
+      index: 0,
+      randomactive:false
 
 
 
     }
   },
-
 
   methods: {
 
@@ -168,9 +178,18 @@ export default {
       this.player.play();
     },
     next() {
+       if(this.randomactive== true){
 
 
+    var number=Math.floor(Math.random()*(this.songs.length));
+           this.index=number;
+           this.current = this.songs[this.index];
+           this.player.src = this.current.src;
+           this.player.play();
+             console.log(this.index);
+       }
 
+else{
       this.index++;
       if (this.index > this.songs.length - 1) {
         //this.index=this.songs.length-1;
@@ -180,7 +199,7 @@ export default {
       this.player.src = this.current.src;
       this.player.play();
       console.log(this.index);
-    },
+    }},
     selectSong(song, i) {
       if (typeof song.src != "undefined") {
         this.current = song;
@@ -193,6 +212,7 @@ export default {
       this.isPlaying = true;
       this.index = i;
     }
+
   }
 }
 </script>
@@ -208,6 +228,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #131313;
+  overflow-x: hidden;
 
 }
 
@@ -256,17 +277,18 @@ body {
 
 #front {
   background-image: linear-gradient(#525252, #2C2C2C);
-  height: 300px;
-  padding: 35px;
+  height: 450px;
+  padding: 15px;
   overflow-y:hidden;
   color: #C2C2C2;
+  
 
   font-family: "montserrat",sans-serif;
 
 
 }
 #front h1{
-  font-size: 70px;
+  font-size: 3.5em;
   color: #f3f3f3;
 
   font-weight: 700;
@@ -277,10 +299,13 @@ body {
 }
 
 #front .image-front{
-  max-height: 430px;
-  max-width:275px;
+  height:70%;
+  width: 100%;
   padding-left: 0px;
   margin-left: 0px;
+  text-align: ri;
+
+  
 
 }
 .list-songs {
@@ -303,17 +328,29 @@ body {
   padding: 10px 45px;
 
   color:#f3f3f3;
-  border-bottom: 1px solid #383838;
+  border-bottom: 2px solid #383838;
 
 }
 .list-container {
   background-color: #131313;
   height: 100vh;
+  margin: 0 20%;
+ 
+}
+
+
+.song-image{
+  width: 100px;
+  height: 90px;
+  float: left;
+  margin-right: 15px;
+
 }
 
 .list-song-title {
   font-size: 17px;
   cursor: pointer;
+  padding-top: 10px;
 }
 
 .list-songs .icon {
@@ -326,8 +363,12 @@ body {
 .list-songs .content {
   margin-top: 0px;
   margin-left: 21px;
+
 }
 
+.list-songs .song-album{
+  padding-top: 10px;
+}
 .playing {
   color: #4ef002;
 
@@ -349,10 +390,19 @@ body {
 }
 
 .buttons button {
-  position: relative;
-  height: 25px;
-  background-color: none;
+  
+ 
+
+  padding: 10px;
   margin: 0 15px;
+
+
+  border-radius: 7px;
+
+
+
+
+
 
 
 }
@@ -362,5 +412,15 @@ body {
 
   font-size: 1em;
   transition: 1s;
+}
+
+
+@media (max-width:900px){
+  .list-container {
+  background-color: #131313;
+  height: 100vh;
+  width: 100%;
+  margin:0px;
+}
 }
 </style>
